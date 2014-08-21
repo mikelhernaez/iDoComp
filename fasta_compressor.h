@@ -26,8 +26,8 @@
 #define MAX_CARDINALITY 1000000
 #define MAX_ALPHA 300000000
 
-#define m_INTS  23
-#define m_CHARS 23
+#define m_INTS  18
+#define m_CHARS 13
 #define m_SIGNS 23
 
 //#define mI 18
