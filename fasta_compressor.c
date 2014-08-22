@@ -8,65 +8,6 @@
 
 #include "iDoComp.h"
 
-uint8_t** generate_char_transitions(chromosome chr){
-    
-    uint8_t** BP_transitions;
-    
-    BASEPAIR refBP, targetBP;
-    
-    uint32_t i = 0, j = 0;
-    
-    FILE *fi = fopen("/tmp/char_trans.txt", "w");
-    
-    BP_transitions = (uint8_t **)calloc(35, sizeof(uint8_t*));
-    
-    for (i = 0; i < 35; i++) {
-        BP_transitions[i] = (uint8_t *)calloc(35, sizeof(uint8_t));
-    }
-    
-    // Store the rest of the numbers related to the edit distance between each of the pair of strings
-    while (chr != NULL) {
-        
-        // Check instructions
-        for (i = 0; i < chr->numInst - 1; i++) {
-            
-            refBP = char2BP(chr->instructions[i].refChar);
-            targetBP = char2BP(chr->instructions[i].targetChar);
-            
-            BP_transitions[refBP][targetBP] = 1;
-        }
-        
-        // Check insertions
-        for (i = 0; i < chr->numInse; i++) {
-            
-            refBP = char2BP(chr->insertions[i].refChar);
-            targetBP = char2BP(chr->insertions[i].targetChar);
-            
-            BP_transitions[refBP][targetBP] = 1;
-        }
-        
-        // Check substitutions
-        for (i = 0; i < chr->numSubs; i++) {
-            
-            refBP = char2BP(chr->substitutions[i].refChar);
-            targetBP = char2BP(chr->substitutions[i].targetChar);
-            
-            BP_transitions[refBP][targetBP] = 1;
-        }
-        
-        chr = chr->next;
-    }
-    
-    for (i = 0; i < 35; i++) {
-        for (j = 0; j < 35; j++) {
-            putc(BP_transitions[i][j], fi);
-        }
-    }
-    
-    fclose(fi);
-    return BP_transitions;
-}
-
 
 uint32_t compress_Signs(arithStream I, uint32_t x){
     
@@ -197,12 +138,9 @@ uint32_t start_fasta_compression(chromosome chr, char* osPath, unsigned int numC
     fasta_compressor fc;
     chromosome chrRoot;
     
-    uint8_t** BP_transitions;
-    
-    BP_transitions = generate_char_transitions(chr);
     
     // Initialize the compressor
-    fc = initialize_fasta_compressor(osPath, COMPRESSION, BP_transitions);
+    fc = initialize_fasta_compressor(osPath, COMPRESSION, chr);
     
     // Start compressing the Ints
     

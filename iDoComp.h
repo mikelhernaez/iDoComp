@@ -33,6 +33,8 @@ uint32_t start_fasta_compression(chromosome chrRoot, char* osPath, unsigned int 
 void start_fasta_decompression(char* osPath, FILE *inputFile, FILE * headerFile);
 BASEPAIR char2BP(char c);
 BASEPAIR BP2char(BASEPAIR c);
-uint8_t** generate_char_transitions(chromosome chr);
+uint8_t** generate_char_transitions(chromosome chr, arithStream signs);
+
+fasta_compressor initialize_fasta_compressor(char osPath[], uint8_t streamDirection, chromosome chr);
 
 #endif

@@ -109,8 +109,6 @@ uint32_t update_stats_Ints(stream_stats stats, int32_t x, uint32_t m, uint8_t st
 uint32_t update_stats_Chars(stream_stats stats, int32_t x, uint32_t m);
 uint32_t update_stats_Signs(stream_stats stats, int32_t x, uint32_t m);
 
-fasta_compressor initialize_fasta_compressor(char osPath[], uint8_t streamDirection, uint8_t **BP_trans);
-
 uint8_t extract_byte(unsigned int x, uint8_t B);
 
 uint32_t compress_Signs(arithStream I, uint32_t x);

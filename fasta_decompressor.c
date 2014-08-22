@@ -8,32 +8,6 @@
 
 #include "iDoComp.h"
 
-uint8_t** regenerate_char_transitions(){
-    
-    uint8_t** BP_transitions;
-    
-    uint32_t i = 0, j = 0;
-    
-    FILE *fi = fopen("/tmp/char_trans.txt", "r");
-    
-    // Allocate memory
-    BP_transitions = (uint8_t **)calloc(35, sizeof(uint8_t*));
-    
-    for (i = 0; i < 35; i++) {
-        BP_transitions[i] = (uint8_t *)calloc(35, sizeof(uint8_t));
-    }
-    
-    // regenerate the transitions
-    for (i = 0; i < 35; i++) {
-        for (j = 0; j < 35; j++) {
-            BP_transitions[i][j] = getc(fi);
-        }
-    }
-    
-    fclose(fi);
-    return BP_transitions;
-}
-
 
 chromosome idc_decompress_chr_ints(fasta_compressor fc, unsigned int* numChr, unsigned int* bpPerLine, uint32_t **targetLength){
     
@@ -275,8 +249,6 @@ void start_fasta_decompression(char* osPath, FILE *inputFile, FILE * headerFile)
     
     char refPath[256], targetPath[256];
     
-    uint8_t** BP_transitions;
-    
     char *S = NULL, *T = NULL;
     
     unsigned int *targetSize = NULL;
@@ -289,9 +261,7 @@ void start_fasta_decompression(char* osPath, FILE *inputFile, FILE * headerFile)
     
     // Initialize the decompressor
     
-    BP_transitions = regenerate_char_transitions();
-    
-    fc = initialize_fasta_compressor(osPath, DECOMPRESSION, BP_transitions);
+    fc = initialize_fasta_compressor(osPath, DECOMPRESSION, NULL);
     
     chr = idc_decompress_chr_ints(fc, &numChr, &bpPerLine, &targetSize);
     
