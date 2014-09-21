@@ -1,0 +1,1 @@
+../data/legPne5/chr1.fasta ../reconstructedGenomes/legPne6/chr1_reconstructed.fasta

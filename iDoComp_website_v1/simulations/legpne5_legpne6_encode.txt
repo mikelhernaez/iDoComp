@@ -1,0 +1,1 @@
+../data/legPne5/chr1.fasta ../data/legPne6/chr1.fasta ../sais-lite-2.4.1/legPne5/chr1.sa

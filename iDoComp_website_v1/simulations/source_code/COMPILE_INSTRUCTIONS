@@ -1,0 +1,5 @@
+To compile the files, please run the following command:
+
+gcc -o ../iDoComp.run idc_generate_mapping.c main.c stats.c arith.c fasta_decompressor.c idc_load_chr.c os_stream.c fasta_compressor.c sam_stream.c -lm 
+
+

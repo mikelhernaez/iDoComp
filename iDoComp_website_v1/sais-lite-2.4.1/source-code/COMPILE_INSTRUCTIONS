@@ -1,0 +1,4 @@
+Run the following command:
+
+gcc -o ../sa.run sa_generator.c sais.c -lm
+

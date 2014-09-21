@@ -1,0 +1,181 @@
+
+#########################################
+                                  
+		iDoComp              
+                                  
+#########################################
+
+#########################################
+		Contact               
+#########################################
+Please contact the authors for any bug/comment:
+
+Idoia Ochoa:	    iochoa@stanford.edu
+Mikel Hernaez:	  mhernaez@stanford.edu
+
+#########################################
+		Purpose
+#########################################
+
+This is a software for compression and decompression of an assembled genome (hereafter denoted as the 'target' genome) in FASTA format using a reference genome. The reference genome is used for both compression and decompression.
+
+
+#########################################
+		Usage
+#########################################
+
+1) Make the suffix array of the reference.
+2) Compress the target genome using the reference.
+3) Decompress the target genome using the reference.
+
+
+#########################################
+		Download
+#########################################
+
+1) Download the software from www.stanford.edu/~iochoa/iDoComp.html 
+Choose between Ubuntu 64 bits and MAC distributions.
+2) Unzip it: you will find the following folders and files
+- iDoComp
+  - README
+  - LICENSE.md
+	- data
+		- legPne5
+			- chr1.fasta
+		- legPne6
+			- chr1.fasta
+	- simulations
+		- iDoComp.run**  
+    - generateFiles.sh 
+		- legpne5_legpne6_decode.txt  
+		- legpne5_legpne6_encode.txt
+    - source_code
+      - COMPILE_INSTRUCTIONS
+      - arith.c
+      - fasta_compressor.c
+      - fasta_compressor.h
+      - fasta_decompressor.c
+      - iDoComp.h
+      - idc_generate_mapping.c
+      - idc_load_chr.c
+      - idc_load_chr.h
+      - main.c
+      - os_stream.c
+      - sam_stream.c
+      - stats.c
+	- results
+		-
+  - reconstructedGenomes
+		- legPne6 
+	- sais-lite-2.4.1
+    - generateSA.sh  
+    - sa.run** 
+		- legPne5  
+			-
+    - source-code
+      - sa_generator.c 
+      - sais.c
+      - sais.h
+      - sais.hxx
+		  - COPYING
+      - COMPILE_INSTRUCTIONS
+      - README
+      - is_orig.c      
+    
+** iDoComp.run and sa.run are compiled for MAC. If using another operating system, go to the source-code folders and follow the instructions on COMPILE-INSTRUCTIONS
+
+#########################################
+		Usage
+#########################################
+
+For an example on how to run the program and generate the necessary files, please see example below.
+
+1) generate the suffix array
+Go to iDoComp/sais-lite-2.4.1, and run the following
+
+./generateSA.sh <pathToFolderContainingFastaFilesOfReference> <pathToFolderToWriteSuffixArray>
+
+This command will generate the suffix array of all the files contained in <pathToFolderContainingFastaFilesOfReference>, and store them in <pathToFolderToWriteSuffixArray>.
+
+2) Compress target genome given reference genome
+Go to iDoComp/simulations
+Run the following command
+
+./iDoComp.run c <fileContainingInEachLineRef,TargetAndSA> <prefixOfOutput>
+
+The <fileContainingInEachLineRef,TargetAndSA> is a file in where each line corresponds to a reference, a target and the suffix array of the reference.
+The <prefixOfOutput> is the name the compressed files will have. In this case the program will generate the files prefixOfOutput_char.ido, prefixOfOutput_headers.ido, prefixOfOutput_ints.ido and prefixOfOutput_signs.ido. 
+
+3) Decompress the target
+Go to iDoComp/simulations
+Run the following command
+
+./iDoComp.run d <fileContainingInEachLineRefAndOutput> <prefixOfOutput>
+
+The <fileContainingInEachLineRefAndOutput> contains in each line the reference and the path for the output.
+The other argument is the <prefixOfOutput> used in step 2).
+
+The files <fileContainingInEachLineRef,TargetAndSA> and <fileContainingInEachLineRefandOutput>, hereafter <fileEncode> and <fileDecode>, can be manually generated, or by using the scrip 'generateFiles.sh' provided in the 'simulations' folder.
+To run the script, go to iDoComp/simulations and run the following:
+
+./generateFiles.sh <refFolder> <targetFolder> <saFolder> <outPath> <fileEncode> <fileDecode>
+
+The <refFolder> should contain ONLY the chromosomes of the reference.
+The <targetFolder> should contain ONLY the chromosomes of the target.
+The chromosomes of both folders should have the same order.
+The <saFolder> should contain the suffix arrays corresponding to the reference.
+The <outPath> is the path where the reconstructed genomes should be stored.
+The script outputs the files <fileEncode> and <fileDecode>
+
+#########################################
+		Example
+#########################################
+
+In the following example, we compress the chr1.fasta of the legPne6 using the chr1.fasta of the legPne5 as the reference.
+We then decompress it and check that the resulting chromosome is the same as the original chr1.fasta of the legPne6.
+
+1) Create the suffix array of the reference: chr1.fasta of legPne5
+Go to iDoComp/sais-lite-2.4.1
+Run the following command:
+
+./generateSA.sh ../data/legPne5/ legPne5/
+
+This command will generate the suffix array of the chr1.fasta contained in ../data/legPne5/ in the folder iDoComp/sais-lite-2.4.1/legPne5/
+
+2) Compress the target chr1.fasta from legPne6 using as a reference the chr1.fasta of legPne5
+Go to the folder iDoComp/simulations
+Run the following command:
+
+./iDoComp.run c legpne5_legpne6_encode.txt ../results/legpne5_legpne6
+
+The file legpne5_legpne6_encode.txt contains the reference, the target and the suffix array. 
+The command generates the files ../results/legpne5_legpne6_char.ido, ../results/legpne5_legpne6_headers.ido, ../results/legpne5_legpne6_ints.ido and ../results/legpne5_legpne6_signs.ido. 
+
+3) Decompress the target
+Go to iDoComp/simulations
+Run the following command:
+
+./iDoComp.run d legpne5_legpne6_decode.txt ../results/legpne5_legpne6
+
+The file legpne5_legpne6_decode.txt contains in each line the reference and the output for the uncompressed file. In this case, the uncompressed file is ../reconstructedGenomes/legPne6/chr1_reconstructed.fasta
+The other argument is the path to the compressed files generated in step 2).
+
+Remark: As outlined above, it is possible to automatically generate the two .txt files needed for compression and decompression. In this example, we will generate them by running the following command from iDoComp/simulations:
+
+./generateFiles.sh ../data/legPne5 ../data/legPne6 ../sais-lite-2.4.1/legPne5 ../reconstructedGenomes/legPne6 encodeFile.txt decodeFile.txt
+
+The file encodeFile.txt should be the same as the file legpne5_legpne6_encode.txt
+The file decodeFile.txt should be the same as the file legpne5_legpne6_decode.txt
+
+4) Check that the algorithm is completely lossless
+Go to iDoComp/data/legPne6
+Run the following command
+
+diff chr1.fasta ../../reconstructedGenomes/legPne6/chr1_reconstructed.fasta
+
+The two files should be equal! :)
+
+#########################################
+    Thanks for using our software!!               
+#########################################
+
