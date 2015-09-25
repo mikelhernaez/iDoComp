@@ -155,6 +155,9 @@ instruction generate_instructions(char *S, char *T, uint32_t m, uint32_t n, int 
             
             // Check if we are in the case where the target has N's, but the reference has none
             instructions[insCtr].pos = insCtr ? instructions[insCtr-1].pos + instructions[insCtr-1].length + 1 : 1;
+            if (instructions[insCtr].pos > n - 2){
+                instructions[insCtr].pos = 1;
+            }
             instructions[insCtr].length = 0;
             instructions[insCtr].targetChar = T[ctr];
             instructions[insCtr].refChar = S[instructions[insCtr].pos - 1];
