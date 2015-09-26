@@ -224,7 +224,7 @@ substitution generate_substitutions(instruction* oldIns, uint32_t* numInstructio
     
     // Allocate the Array for the substitutions
     substitution substitutions;
-    substitutions = (substitution) malloc((MAX_LEN_SUB + 1)*(*numInstructions)*sizeof(struct substitution_t));
+    substitutions = (substitution) malloc((MAX_LEN_SUB + 1)*(uint64_t)(*numInstructions)*sizeof(struct substitution_t));
     
     // Allocate the Array for the new instructions
     instruction newInstructions;
